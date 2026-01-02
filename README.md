@@ -1,3 +1,3 @@
 # LightningStrike
 
-Potentially the most cool static site generator ever. (with dependent types and formal proofs!)
+An experimental High-Frequency Trading (HFT) orderbook implemented in ATS.
