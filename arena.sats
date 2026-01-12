@@ -19,9 +19,21 @@ fun arena_free {l:addr} (
 ): void
 
 // Set the next index for an order at idx
-fun arena_set_next {l:addr} (
+fun arena_set_next {l:addr} {i:nat | i < MAX_ORDERS} (
   pf: !arena_vt @ l |
   p: ptr l,
-  idx: size_t,
+  idx: size_t i,
   next_val: int
 ): void
+
+// Allocate a new order in the arena
+// Returns the index of the new order
+// free_idx is updated. We require free_idx < MAX_ORDERS
+fun arena_alloc_order {l:addr} {i:nat | i < MAX_ORDERS} (
+  pf: !arena_vt @ l |
+  p: ptr l,
+  free_idx: &size_t i >> size_t (i+1),
+  oid: oid_t,
+  size: qty_t,
+  trader: string
+): int

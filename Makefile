@@ -2,7 +2,7 @@
 
 PATSCC=patscc
 PATSOPT=patsopt
-ATSCCFLAGS=-O2 -flto
+ATSCCFLAGS=-O2 -flto -DATS_MEMALLOC_LIBC
 
 all: main
 

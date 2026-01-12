@@ -1,4 +1,7 @@
 #include "share/atspre_staload.hats"
+// We need to staload libc for malloc/free availability if using default allocator
+staload "libats/libc/SATS/stdlib.sats" 
+
 staload "types.sats"
 staload "arena.sats"
 
