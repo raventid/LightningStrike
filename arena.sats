@@ -2,7 +2,7 @@
 
 #include "types.sats"
 
-#define MAX_ORDERS 1000000
+#define MAX_ORDERS 100
 
 // Linear array of order entries
 viewtypedef arena_vt = @[order_entry][MAX_ORDERS]
