@@ -6,7 +6,7 @@ ATSCCFLAGS=-O2 -flto -DATS_MEMALLOC_LIBC
 
 all: main
 
-main: main.dats arena.dats
+main: main.dats arena.dats arena.sats types.sats
 	$(PATSCC) $(ATSCCFLAGS) -o main main.dats arena.dats
 
 clean:
