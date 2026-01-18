@@ -9,5 +9,8 @@ all: main
 main: main.dats arena.dats limit.dats arena.sats types.sats limit.sats
 	$(PATSCC) $(ATSCCFLAGS) -o main main.dats arena.dats limit.dats
 
+run: main
+	./main
+
 clean:
 	rm -f main *~ *_?ats.c *_?ats.o
