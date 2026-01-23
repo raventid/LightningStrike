@@ -60,11 +60,13 @@
  *  efficient cache access.
  *****************************************************************************/
 
-#include < stdio.h > #include < strings.h > #include < stdlib.h > #include "engine.h"
+#include <stdio.h>
+#include <strings.h>
+#include <stdlib.h>
+#include "engine.h"
 
 /* Enable/disable optimizations */
-#
-define UNROLL_STRCPY
+# define UNROLL_STRCPY
 
 # define MAX_NUM_ORDERS 1010000
 
