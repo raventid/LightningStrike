@@ -13,4 +13,4 @@ run: main
 	./main
 
 clean:
-	rm -f main *~ *_?ats.c *_?ats.o
+	rm -f main *~ *.c *_?ats.o *.c
