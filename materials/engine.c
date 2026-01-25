@@ -71,21 +71,28 @@
 # define MAX_NUM_ORDERS 1010000
 
 // #define DEBUG        (enable/disable debugging)
-# ifdef DEBUG# define ASSERT(c) do {\
+# ifdef DEBUG
+# define ASSERT(c) do {\
   if (!(c)) {
     fprintf(stderr, "ASSERT failure at line %d\n", __LINE__);\
     exit(1);
   }
-} while (0)#
-else# define ASSERT(c)# endif
+} while (0)
+# else
+# define ASSERT(c)
+# endif
 
-# ifdef UNROLL_STRCPY# define COPY_STRING(dst, src) do {\
-  dst[0] = src[0];
-  dst[1] = src[1];
-  dst[2] = src[2];\
+# ifdef UNROLL_STRCPY
+# define COPY_STRING(dst, src) do { \
+  dst[0] = src[0]; \
+  dst[1] = src[1]; \
+  dst[2] = src[2]; \
   dst[3] = src[3]; /* dst[4] = src[4]; */ \
-} while (0)#
-else# include < string.h > #define COPY_STRING(dst, src) strcpy(dst, src)# endif
+} while (0)
+# else
+# include <string.h>
+# define COPY_STRING(dst, src) strcpy(dst, src)
+# endif
 
 /* struct orderBookEntry: describes a single outstanding limit order
    (Buy or Sell). */
@@ -118,8 +125,7 @@ static orderBookEntry_t arenaBookEntries[MAX_NUM_ORDERS];
 
 static orderBookEntry_t * arenaPtr;
 
-#
-define ALLOC_BOOK_ENTRY(id)
+#define ALLOC_BOOK_ENTRY(id)
 
 void init() {
   /* Initialize the price point array */
@@ -138,11 +144,11 @@ void destroy() {}
 
 /* Insert a new order book entry at the tail of the price point list */
 void ppInsertOrder(pricePoint_t * ppEntry, orderBookEntry_t * entry) {
-  if (ppEntry - > listHead != NULL)
-    ppEntry - > listTail - > next = entry;
+  if (ppEntry -> listHead != NULL)
+    ppEntry -> listTail -> next = entry;
   else
-    ppEntry - > listHead = entry;
-  ppEntry - > listTail = entry;
+    ppEntry -> listHead = entry;
+  ppEntry -> listTail = entry;
 }
 
 /* Report trade execution */
@@ -184,38 +190,38 @@ t_orderid limit(t_order order) {
     if (price >= askMin) {
       ppEntry = pricePoints + askMin;
       do {
-        bookEntry = ppEntry - > listHead;
+        bookEntry = ppEntry -> listHead;
         while (bookEntry != NULL) {
-          if (bookEntry - > size < orderSize) {
+          if (bookEntry -> size < orderSize) {
             EXECUTE_TRADE(order.symbol, order.trader,
-              bookEntry - > trader, price, bookEntry - > size);
-            orderSize -= bookEntry - > size;
-            bookEntry = bookEntry - > next;
+              bookEntry -> trader, price, bookEntry -> size);
+            orderSize -= bookEntry -> size;
+            bookEntry = bookEntry -> next;
 
           } else {
             EXECUTE_TRADE(order.symbol, order.trader,
-              bookEntry - > trader, price, orderSize);
-            if (bookEntry - > size > orderSize)
-              bookEntry - > size -= orderSize;
+              bookEntry -> trader, price, orderSize);
+            if (bookEntry -> size > orderSize)
+              bookEntry -> size -= orderSize;
             else
-              bookEntry = bookEntry - > next;
+              bookEntry = bookEntry -> next;
 
-            ppEntry - > listHead = bookEntry;
+            ppEntry -> listHead = bookEntry;
             return ++curOrderID;
           }
         }
 
         /* We have exhausted all orders at the askMin price point. Move on to
            the next price level. */
-        ppEntry - > listHead = NULL;
+        ppEntry -> listHead = NULL;
         ppEntry++;
         askMin++;
       } while (price >= askMin);
     }
 
     entry = arenaBookEntries + (++curOrderID);
-    entry - > size = orderSize;
-    COPY_STRING(entry - > trader, order.trader);
+    entry -> size = orderSize;
+    COPY_STRING(entry -> trader, order.trader);
     ppInsertOrder( & pricePoints[price], entry);
     if (bidMax < price)
       bidMax = price;
@@ -226,38 +232,38 @@ t_orderid limit(t_order order) {
     if (price <= bidMax) {
       ppEntry = pricePoints + bidMax;
       do {
-        bookEntry = ppEntry - > listHead;
+        bookEntry = ppEntry -> listHead;
         while (bookEntry != NULL) {
-          if (bookEntry - > size < orderSize) {
-            EXECUTE_TRADE(order.symbol, bookEntry - > trader,
-              order.trader, price, bookEntry - > size);
-            orderSize -= bookEntry - > size;
-            bookEntry = bookEntry - > next;
+          if (bookEntry -> size < orderSize) {
+            EXECUTE_TRADE(order.symbol, bookEntry -> trader,
+              order.trader, price, bookEntry -> size);
+            orderSize -= bookEntry -> size;
+            bookEntry = bookEntry -> next;
 
           } else {
-            EXECUTE_TRADE(order.symbol, bookEntry - > trader,
+            EXECUTE_TRADE(order.symbol, bookEntry -> trader,
               order.trader, price, orderSize);
-            if (bookEntry - > size > orderSize)
-              bookEntry - > size -= orderSize;
+            if (bookEntry -> size > orderSize)
+              bookEntry -> size -= orderSize;
             else
-              bookEntry = bookEntry - > next;
+              bookEntry = bookEntry -> next;
 
-            ppEntry - > listHead = bookEntry;
+            ppEntry -> listHead = bookEntry;
             return ++curOrderID;
           }
         }
 
         /* We have exhausted all orders at the bidMax price point. Move on to
            the next price level. */
-        ppEntry - > listHead = NULL;
+        ppEntry -> listHead = NULL;
         ppEntry--;
         bidMax--;
       } while (price <= bidMax);
     }
 
     entry = arenaBookEntries + (++curOrderID);
-    entry - > size = orderSize;
-    COPY_STRING(entry - > trader, order.trader);
+    entry -> size = orderSize;
+    COPY_STRING(entry -> trader, order.trader);
     ppInsertOrder( & pricePoints[price], entry);
     if (askMin > price)
       askMin = price;
