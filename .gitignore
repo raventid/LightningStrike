@@ -1,3 +1,9 @@
 main
 *.c
+*.o
 !/materials/*.c
+!/tests/*.c
+
+# Local-only planning notes
+/IMPLEMENTATION_PLAN.md
+/docs/
