@@ -25,9 +25,9 @@ in
     ()
   end else let
     // List not empty, append to tail
-    // We assume tail is a valid index < MAX_ORDERS if it is >= 0
+    // We assume tail is a valid index < MAX_NUM_ORDERS if it is >= 0
     val () = assertloc (tail >= 0)
-    val tail_sz = $UNSAFE.cast{ [i:nat | i < MAX_ORDERS] size_t(i) } (tail)
+    val tail_sz = $UNSAFE.cast{ [i:nat | i < MAX_NUM_ORDERS] size_t(i) } (tail)
     val () = arena_set_next (pf | p, tail_sz, oidx_int)
     val () = lvl.tailOrder := oidx_int
   in

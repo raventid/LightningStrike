@@ -2,10 +2,10 @@
 
 #include "types.sats"
 
-#define MAX_ORDERS 100
+#define MAX_NUM_ORDERS 1010000
 
 // Linear array of order entries
-viewtypedef arena_vt = @[order_entry][MAX_ORDERS]
+viewtypedef arena_vt = @[order_entry][MAX_NUM_ORDERS]
 
 // Function to allocate the arena
 // Returns a pointer to the array, the proof of its view, and the GC proof
@@ -19,7 +19,7 @@ fun arena_free {l:addr} (
 ): void
 
 // Set the next index for an order at idx
-fun arena_set_next {l:addr} {i:nat | i < MAX_ORDERS} (
+fun arena_set_next {l:addr} {i:nat | i < MAX_NUM_ORDERS} (
   pf: !arena_vt @ l |
   p: ptr l,
   idx: size_t i,
@@ -28,8 +28,8 @@ fun arena_set_next {l:addr} {i:nat | i < MAX_ORDERS} (
 
 // Allocate a new order in the arena
 // Returns the index of the new order
-// free_idx is updated. We require free_idx < MAX_ORDERS
-fun arena_alloc_order {l:addr} {i:nat | i < MAX_ORDERS} (
+// free_idx is updated. We require free_idx < MAX_NUM_ORDERS
+fun arena_alloc_order {l:addr} {i:nat | i < MAX_NUM_ORDERS} (
   pf: !arena_vt @ l |
   p: ptr l,
   free_idx: &size_t i >> size_t (i+1),
