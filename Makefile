@@ -14,6 +14,14 @@ main: main.dats arena.dats limit.dats arena.sats types.sats limit.sats
 run: main
 	./main
 
+# ---- Benches --------------------------------------------------------------
+
+bench/bench_arena: bench/bench_arena.dats arena.dats arena.sats types.sats
+	$(PATSCC) $(ATSCCFLAGS) -o $@ bench/bench_arena.dats arena.dats
+
+bench-arena: bench/bench_arena
+	./bench/bench_arena
+
 # ---- Tests ----------------------------------------------------------------
 
 # Reference oracle: materials/engine.c with symbols renamed to oracle_*.
@@ -30,3 +38,4 @@ test: tests/oracle.o
 clean:
 	rm -f main *~ *.c *_?ats.o *.c
 	rm -f tests/*.o tests/test_runner
+	rm -f bench/*.o bench/bench_arena bench/*_?ats.c
