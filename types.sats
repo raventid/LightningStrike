@@ -11,7 +11,11 @@
 // failure at every construction site.
 typedef price_t = [p:int | p >= MIN_PRICE; p <= MAX_PRICE] int p
 
-typedef qty_t = int
+// Quantity / size: non-negative. Cancellation (size := 0) is the lower bound;
+// fills only ever subtract size when the maker has enough to cover, so the
+// invariant holds across matching too.
+typedef qty_t = [q:int | q >= 0] int q
+
 typedef oid_t = int
 
 // Side: typesafe algebraic data type
