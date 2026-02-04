@@ -18,8 +18,14 @@ typedef qty_t = [q:int | q >= 0] int q
 
 typedef oid_t = int
 
+// Trader identifier: 4 chars packed into a 4-byte value, stored inline in the
+// arena entry. Mirrors voyager (`char trader[4]` in orderBookEntry_t — null is
+// reconstructed at the API boundary, not stored). Opaque on the ATS side; the
+// pack/unpack primitives are in arena.dats.
+typedef trader_t = int
+
 // Side: typesafe algebraic data type
-datatype side_t = 
+datatype side_t =
   | Buy
   | Sell
 
@@ -29,7 +35,7 @@ typedef order_entry = @{
   oid = oid_t,
   size = qty_t,
   next = int, // -1 indicates end of list
-  trader = string // Simplified for now
+  trader = trader_t
 }
 
 // Limit Level: Represents a specific price level
