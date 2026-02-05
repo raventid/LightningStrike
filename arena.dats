@@ -19,7 +19,7 @@ implement arena_create () = let
   val (pf_arr, pf_gc | p_arr) = array_ptr_alloc<order_entry>(i2sz(MAX_NUM_ORDERS))
 
   // Initialize with a default value (trader = 0 = all-null bytes)
-  val init_val = @{oid=0, size=0, next= ~1, trader=0}
+  val init_val = @{size=0, next= ~1, trader=0}
   val () = array_initize_elt<order_entry>(!p_arr, i2sz(MAX_NUM_ORDERS), init_val)
 in
   (pf_arr, pf_gc | p_arr)
@@ -37,7 +37,6 @@ implement arena_set_next (pf | p, idx, next_val) = let
   val old_entry = array_get_at_guint<order_entry> (!p, idx)
   // Create new value with updated next
   val new_entry = @{
-    oid = old_entry.oid,
     size = old_entry.size,
     next = next_val,
     trader = old_entry.trader
@@ -48,12 +47,11 @@ in
   ()
 end
 
-implement arena_alloc_order (pf | p, free_idx, oid, size, trader) = let
+implement arena_alloc_order (pf | p, free_idx, size, trader) = let
   val idx = free_idx
   // We know free_idx < MAX_NUM_ORDERS from the signature
-  
+
   val new_entry = @{
-    oid = oid,
     size = size,
     next = ~1,
     trader = trader_pack(trader)

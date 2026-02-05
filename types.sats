@@ -29,12 +29,13 @@ datatype side_t =
   | Buy
   | Sell
 
-// Order Entry: A node in the order book linked list
-// We use an index 'next' for array-based linking
+// Order Entry: A node in the order book linked list.
+// The arena slot index *is* the orderID — we don't store it as a separate
+// field. (See docs/decisions.md Q6.) `next` is an index into the same arena
+// for the price-level FIFO; -1 marks end-of-list.
 typedef order_entry = @{
-  oid = oid_t,
   size = qty_t,
-  next = int, // -1 indicates end of list
+  next = int,
   trader = trader_t
 }
 

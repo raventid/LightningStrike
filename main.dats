@@ -15,22 +15,20 @@ implement main0 () = let
   var my_limit = limit_create (100)
   val () = println! ("Created Limit Level at ", my_limit.limitPrice)
 
-  // Allocate Order 1
+  // Allocate Order 1 — orderID is the returned slot index (no separate oid).
   var free_idx: size_t = i2sz(0)
-  val oid1 = 101
   val size1 = 10
-  val idx1 = arena_alloc_order (pf_arena | p_arena, free_idx, oid1, size1, "TraderA")
+  val idx1 = arena_alloc_order (pf_arena | p_arena, free_idx, size1, "TraderA")
   val () = println! ("Allocated Order 1 at index: ", idx1)
-  
+
   // Add Order 1 to Limit
   val idx1_sz = $UNSAFE.cast{ [i:nat | i < MAX_NUM_ORDERS] size_t(i) } (idx1)
   val () = limit_add_order (pf_arena | p_arena, my_limit, idx1_sz, size1)
   val () = println! ("Added Order 1 to Limit.")
 
   // Allocate Order 2
-  val oid2 = 102
   val size2 = 20
-  val idx2 = arena_alloc_order (pf_arena | p_arena, free_idx, oid2, size2, "TraderB")
+  val idx2 = arena_alloc_order (pf_arena | p_arena, free_idx, size2, "TraderB")
   val () = println! ("Allocated Order 2 at index: ", idx2)
 
   val idx2_sz = $UNSAFE.cast{ [i:nat | i < MAX_NUM_ORDERS] size_t(i) } (idx2)
