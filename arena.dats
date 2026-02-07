@@ -60,5 +60,5 @@ implement arena_alloc_order (pf | p, free_idx, size, trader) = let
   val () = array_set_at_guint<order_entry> (!p, idx, new_entry)
   val () = free_idx := idx + 1
 in
-  $UNSAFE.cast{int}(idx)
+  idx
 end

@@ -27,8 +27,10 @@ fun arena_set_next {l:addr} {i:nat | i < MAX_NUM_ORDERS} (
 ): void
 
 // Allocate a new order in the arena.
-// The returned int is the slot index, which doubles as the orderID
-// (see docs/decisions.md Q6). free_idx is bumped on success; we require
+// The returned `size_t i` is the slot index, which doubles as the orderID
+// (see docs/decisions.md Q6). The dependent return type lets callers thread
+// the bound `i < MAX_NUM_ORDERS` through subsequent calls without an
+// $UNSAFE.cast at every step. free_idx is bumped on success; we require
 // free_idx < MAX_NUM_ORDERS at entry.
 fun arena_alloc_order {l:addr} {i:nat | i < MAX_NUM_ORDERS} (
   pf: !arena_vt @ l |
@@ -36,4 +38,4 @@ fun arena_alloc_order {l:addr} {i:nat | i < MAX_NUM_ORDERS} (
   free_idx: &size_t i >> size_t (i+1),
   size: qty_t,
   trader: string
-): int
+): size_t i

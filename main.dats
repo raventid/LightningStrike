@@ -21,9 +21,8 @@ implement main0 () = let
   val idx1 = arena_alloc_order (pf_arena | p_arena, free_idx, size1, "TraderA")
   val () = println! ("Allocated Order 1 at index: ", idx1)
 
-  // Add Order 1 to Limit
-  val idx1_sz = $UNSAFE.cast{ [i:nat | i < MAX_NUM_ORDERS] size_t(i) } (idx1)
-  val () = limit_add_order (pf_arena | p_arena, my_limit, idx1_sz, size1)
+  // Add Order 1 to Limit (idx1 is already a bounded size_t — no cast needed)
+  val () = limit_add_order (pf_arena | p_arena, my_limit, idx1, size1)
   val () = println! ("Added Order 1 to Limit.")
 
   // Allocate Order 2
@@ -31,8 +30,7 @@ implement main0 () = let
   val idx2 = arena_alloc_order (pf_arena | p_arena, free_idx, size2, "TraderB")
   val () = println! ("Allocated Order 2 at index: ", idx2)
 
-  val idx2_sz = $UNSAFE.cast{ [i:nat | i < MAX_NUM_ORDERS] size_t(i) } (idx2)
-  val () = limit_add_order (pf_arena | p_arena, my_limit, idx2_sz, size2)
+  val () = limit_add_order (pf_arena | p_arena, my_limit, idx2, size2)
   val () = println! ("Added Order 2 to Limit.")
 
   // Check Limit Status
