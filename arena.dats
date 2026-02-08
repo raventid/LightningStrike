@@ -47,6 +47,24 @@ in
   ()
 end
 
+implement arena_get_size (pf | p, idx) = let
+  val entry = array_get_at_guint<order_entry> (!p, idx)
+in
+  entry.size
+end
+
+implement arena_set_size (pf | p, idx, new_size) = let
+  val old_entry = array_get_at_guint<order_entry> (!p, idx)
+  val new_entry = @{
+    size = new_size,
+    next = old_entry.next,
+    trader = old_entry.trader
+  }
+  val () = array_set_at_guint<order_entry> (!p, idx, new_entry)
+in
+  ()
+end
+
 implement arena_alloc_order (pf | p, free_idx, size, trader) = let
   val idx = free_idx
   // We know free_idx < MAX_NUM_ORDERS from the signature

@@ -38,7 +38,18 @@ implement main0 () = let
   val () = println! ("Limit Volume: ", my_limit.totalVolume)
   val () = println! ("Limit Head: ", my_limit.headOrder)
   val () = println! ("Limit Tail: ", my_limit.tailOrder)
-  
+
+  // Smoke-probe arena_get_size / arena_set_size (Step 11).
+  val sz1_before = arena_get_size (pf_arena | p_arena, idx1)
+  val sz2 = arena_get_size (pf_arena | p_arena, idx2)
+  val () = println! ("Order 1 size (before cancel): ", sz1_before)
+  val () = println! ("Order 2 size: ", sz2)
+
+  val () = arena_set_size (pf_arena | p_arena, idx1, 0)
+  val sz1_after = arena_get_size (pf_arena | p_arena, idx1)
+  val () = println! ("Order 1 size (after cancel):  ", sz1_after)
+  val () = assertloc (sz1_after = 0)
+
   // Clean up
   val () = arena_free (pf_arena, pf_gc | p_arena)
   val () = println! ("Arena Freed.")

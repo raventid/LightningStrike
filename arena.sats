@@ -26,6 +26,23 @@ fun arena_set_next {l:addr} {i:nat | i < MAX_NUM_ORDERS} (
   next_val: int
 ): void
 
+// Read the current size of the order at idx. Used by matching to know how
+// much liquidity the resting order has, and by cancellation tests.
+fun arena_get_size {l:addr} {i:nat | i < MAX_NUM_ORDERS} (
+  pf: !arena_vt @ l |
+  p: ptr l,
+  idx: size_t i
+): qty_t
+
+// Mutate the size of the order at idx. Cancellation sets it to 0 (voyager's
+// soft delete); matching decrements it on partial fills.
+fun arena_set_size {l:addr} {i:nat | i < MAX_NUM_ORDERS} (
+  pf: !arena_vt @ l |
+  p: ptr l,
+  idx: size_t i,
+  new_size: qty_t
+): void
+
 // Allocate a new order in the arena.
 // The returned `size_t i` is the slot index, which doubles as the orderID
 // (see docs/decisions.md Q6). The dependent return type lets callers thread
