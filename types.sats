@@ -6,6 +6,11 @@
 #define MIN_PRICE 1
 #define MAX_PRICE 10000
 
+// Arena capacity: matches voyager (materials/engine.c MAX_NUM_ORDERS).
+// Promoted from arena.sats to types.sats so type-level constants
+// (e.g. oidx_opt below) can reference it.
+#define MAX_NUM_ORDERS 1010000
+
 // Refined integer: a price is statically known to lie in [MIN_PRICE, MAX_PRICE].
 // Out-of-range literals (e.g. 0 or 10001) produce a compile-time constraint
 // failure at every construction site.
@@ -39,10 +44,17 @@ typedef order_entry = @{
   trader = trader_t
 }
 
+// Optional arena index: either -1 (empty/end-of-list) or a valid arena slot
+// in [0, MAX_NUM_ORDERS). The disjunction is represented as the linear range
+// [-1, MAX_NUM_ORDERS), since ATS's constraint solver handles linear
+// inequalities, not arbitrary disjunctions. The else-branch of `if x < 0`
+// then narrows to [0, MAX_NUM_ORDERS) — sufficient for a safe i2sz cast.
+typedef oidx_opt = [i:int | i >= ~1; i < MAX_NUM_ORDERS] int i
+
 // Limit Level: Represents a specific price level
 typedef limit_level = @{
   limitPrice = price_t,
   totalVolume = qty_t,
-  headOrder = int, // Index into arena
-  tailOrder = int  // Index into arena
+  headOrder = oidx_opt,
+  tailOrder = oidx_opt
 }

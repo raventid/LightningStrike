@@ -2,7 +2,8 @@
 
 #include "types.sats"
 
-#define MAX_NUM_ORDERS 1010000
+// MAX_NUM_ORDERS now lives in types.sats so refined types like oidx_opt can
+// reference it.
 
 // Linear array of order entries
 viewtypedef arena_vt = @[order_entry][MAX_NUM_ORDERS]
